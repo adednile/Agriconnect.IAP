@@ -1,5 +1,6 @@
 <?php
 // login.php: Handles user login
+
 require_once 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -12,9 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     foreach ([['farmers', 'farmer_id'], ['buyers', 'buyer_id']] as $info) {
         $table = $info[0];
         $id_col = $info[1];
-        $stmt = $pdo->prepare("SELECT * FROM $table WHERE phone = ?");
-        $stmt->execute([$phone]);
-        $row = $stmt->fetch();
+        $stmt = $mysqli->prepare("SELECT * FROM $table WHERE phone = ?");
+        $stmt->bind_param('s', $phone);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
         if ($row && isset($row['password']) && password_verify($password, $row['password'])) {
             $user = $row;
             $role = $table === 'farmers' ? 'farmer' : 'buyer';

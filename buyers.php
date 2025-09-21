@@ -7,15 +7,18 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'buyer') {
 }
 $buyer_id = $_SESSION['user_id'];
 // Fetch buyer profile
-$stmt = $pdo->prepare('SELECT * FROM buyers WHERE buyer_id = ?');
-$stmt->execute([$buyer_id]);
-$buyer = $stmt->fetch();
+$stmt = $mysqli->prepare('SELECT * FROM buyers WHERE buyer_id = ?');
+$stmt->bind_param('i', $buyer_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$buyer = $result->fetch_assoc();
 // Update profile
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name']);
     $business_type = trim($_POST['business_type']);
-    $stmt = $pdo->prepare('UPDATE buyers SET name=?, business_type=? WHERE buyer_id=?');
-    $stmt->execute([$name, $business_type, $buyer_id]);
+    $stmt = $mysqli->prepare('UPDATE buyers SET name=?, business_type=? WHERE buyer_id=?');
+    $stmt->bind_param('ssi', $name, $business_type, $buyer_id);
+    $stmt->execute();
     header('Location: buyers.php?updated=1');
     exit();
 }

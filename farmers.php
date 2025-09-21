@@ -7,16 +7,19 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'farmer') {
 }
 $farmer_id = $_SESSION['user_id'];
 // Fetch farmer profile
-$stmt = $pdo->prepare('SELECT * FROM farmers WHERE farmer_id = ?');
-$stmt->execute([$farmer_id]);
-$farmer = $stmt->fetch();
+$stmt = $mysqli->prepare('SELECT * FROM farmers WHERE farmer_id = ?');
+$stmt->bind_param('i', $farmer_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$farmer = $result->fetch_assoc();
 // Update profile
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name']);
     $county = trim($_POST['county']);
     $language = $_POST['language'];
-    $stmt = $pdo->prepare('UPDATE farmers SET name=?, county=?, language=? WHERE farmer_id=?');
-    $stmt->execute([$name, $county, $language, $farmer_id]);
+    $stmt = $mysqli->prepare('UPDATE farmers SET name=?, county=?, language=? WHERE farmer_id=?');
+    $stmt->bind_param('sssi', $name, $county, $language, $farmer_id);
+    $stmt->execute();
     header('Location: farmers.php?updated=1');
     exit();
 }

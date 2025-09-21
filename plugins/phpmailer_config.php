@@ -12,15 +12,15 @@ function send_welcome_email($to, $name) {
     try {
         //Server settings
         $mail->isSMTP();
-        $mail->Host       = 'smtp.example.com'; // Set SMTP server
+        $mail->Host       = 'smtp.gmail.com'; // Gmail SMTP server
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'your@email.com'; // SMTP username
-        $mail->Password   = 'yourpassword';   // SMTP password
+        $mail->Username   = 'elindeda1@gmail.com'; // Gmail address
+        $mail->Password   = '';   // Gmail App Password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
         //Recipients
-        $mail->setFrom('no-reply@agriwebapp.com', 'Agri-WebApp');
+        $mail->setFrom('elindeda1@gmail.com', 'Agri-WebApp');
         $mail->addAddress($to, $name);
 
         //Content
@@ -32,6 +32,7 @@ function send_welcome_email($to, $name) {
         $mail->send();
         return true;
     } catch (Exception $e) {
+        echo "Mailer Error: {$mail->ErrorInfo}";
         return false;
     }
 }
