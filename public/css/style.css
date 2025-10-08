@@ -1,0 +1,36 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f6f3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 400px;
+}
+
+input, button {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button, .btn {
+    background: #3b7f41;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover, .btn:hover {
+    background: #2d6631;
+}
