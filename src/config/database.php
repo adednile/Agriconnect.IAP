@@ -1,0 +1,34 @@
+<?php
+namespace App\Config;
+use PDO;
+use PDOException;
+
+class Database {
+    private $host;
+    private $db_name;
+    private $username;
+    private $password;
+    public $conn;
+
+    public function __construct() {
+        $this->host = $_ENV['DB_HOST'];
+        $this->db_name = $_ENV['DB_NAME'];
+        $this->username = $_ENV['DB_USER'];
+        $this->password = $_ENV['DB_PASS'];
+    }
+
+    public function connect() {
+        $this->conn = null;
+        try {
+            $this->conn = new PDO(
+                "mysql:host={$this->host};dbname={$this->db_name};charset=utf8mb4",
+                $this->username,
+                $this->password
+            );
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            error_log("Database connection failed: " . $e->getMessage());
+        }
+        return $this->conn;
+    }
+}
