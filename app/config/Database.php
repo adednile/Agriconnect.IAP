@@ -1,4 +1,9 @@
 <?php
+namespace App\Config;
+
+use PDO;
+use PDOException;
+
 class Database {
     private $host;
     private $db_name;
@@ -15,7 +20,7 @@ class Database {
     }
 
     private function loadEnv() {
-        $envPath = __DIR__ . '/../.env';
+        $envPath = __DIR__ . '/../../.env';
         if (!file_exists($envPath)) {
             die("❌ .env file missing!");
         }
@@ -43,4 +48,3 @@ class Database {
         }
     }
 }
-?>
