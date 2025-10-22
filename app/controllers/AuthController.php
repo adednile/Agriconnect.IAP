@@ -116,11 +116,23 @@ class AuthController {
         return 'not_verified';
     }
 
-    return [
+    // Start session here and set consistent session variables for the app.
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    // regenerate session id to prevent fixation
+    if (function_exists('session_regenerate_id')) session_regenerate_id(true);
+
+    $userArray = [
         'id' => $user['id'],
         'name' => $user['name'],
         'role' => $user['role']
     ];
+
+    $_SESSION['user'] = $userArray;
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['user_role'] = $user['role']; // legacy compatibility
+    $_SESSION['is_admin'] = ($user['role'] === 'admin');
+
+    return $userArray;
 }
 
 }

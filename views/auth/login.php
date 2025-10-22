@@ -21,12 +21,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $msg = "❌ Invalid email or password.";
     } elseif (is_array($user)) {
         // ✅ Login successful, store session
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['name'];
-        $_SESSION['user_role'] = $user['role'];
+        // Set consistent session values for the app
+    $_SESSION['user'] = $user;
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['user_role'] = $user['role']; // legacy compatibility
+    $_SESSION['is_admin'] = ($user['role'] === 'admin');
 
-        // Redirect to dashboard or home
-        header("Location: ../../index.php");
+        // Redirect based on role
+        switch ($user['role']) {
+            case 'farmer':
+                header('Location: ../../views/farmer/dashboard.php');
+                break;
+            case 'buyer':
+                header('Location: ../../views/buyer/dashboard.php');
+                break;
+            case 'driver':
+                header('Location: ../../views/driver/dashboard.php');
+                break;
+            case 'agronomist':
+                header('Location: ../../views/agronomist/dashboard.php');
+                break;
+            case 'admin':
+                header('Location: ../../views/admin/dashboard.php');
+                break;
+            default:
+                header('Location: ../../index.php');
+        }
         exit;
     } else {
         $msg = "⚠️ Unexpected error occurred. Try again later.";
