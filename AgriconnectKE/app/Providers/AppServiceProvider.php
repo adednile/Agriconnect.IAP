@@ -1,24 +1,25 @@
 <?php
+// app/Providers/AppServiceProvider.php
 
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
+use App\Http\Middleware\CheckRole;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
+    public function register()
     {
-        //
+        $this->app->singleton('role', function ($app) {
+            return new CheckRole();
+        });
     }
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
+    public function boot()
     {
-        //
+        Blade::if('role', function ($role) {
+            return auth()->check() && auth()->user()->role === $role;
+        });
     }
 }
